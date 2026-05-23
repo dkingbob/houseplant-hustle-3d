@@ -83,9 +83,9 @@ function tick(now) {
         scroll.target  = 0;
     }
 
-    updatePhase(scroll.current, mouse.nx, mouse.ny, mouse.y);
+    updatePhase(scroll.current, mouse.nx, mouse.ny);
 
-    const ph = Math.min(8, Math.floor(scroll.current / window.innerHeight));
+    const ph = Math.min(8, Math.floor(scroll.current / (window.innerHeight * 1.5)));
     if (ph === 0) stepRubber();
 
     // Trigger per-phase reveals on first arrival

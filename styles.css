@@ -30,7 +30,7 @@ body {
 
 /* ── Scroll phantom ─────────────────────────────────────────────── */
 
-#scroll-phantom { height: 900vh; width: 1px; pointer-events: none; }
+#scroll-phantom { height: 1350vh; width: 1px; pointer-events: none; }
 
 /* ── Scan line ─────────────────────────────────────────────────── */
 

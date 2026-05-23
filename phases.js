@@ -59,10 +59,10 @@ let _loopPending = false;
 let prevPhase = -1;
 
 // ── Main phase update — called every frame ────────────────────────
-export function updatePhase(vs, mnx, mny, mouseY) {
-    const vh    = window.innerHeight;
-    const phase = Math.min(8, Math.floor(vs / vh));  // 0-8
-    const rawT  = (vs % vh) / vh;                     // 0-1
+export function updatePhase(vs, mnx, mny) {
+    const vh    = window.innerHeight * 1.5;            // 150vh per phase
+    const phase = Math.min(8, Math.floor(vs / vh));    // 0-8
+    const rawT  = (vs % vh) / vh;                      // 0-1
     const t     = eio(rawT);
 
     // ── Camera ──────────────────────────────────────────────────
@@ -136,10 +136,17 @@ export function updatePhase(vs, mnx, mny, mouseY) {
     else if (phase === 6) { updateSketch(1, sketchHover);    show(6, 1); }
     else                  { hideSketch();                     show(6, 0); }
 
-    // Phase 7: scan + modes
-    if (phase === 6)      { show(7, Math.min(1, t * 2)); updateScanLine(mouseY, true); }
-    else if (phase === 7) { show(7, 1);                  updateScanLine(mouseY, true); }
-    else                  { show(7, 0);                  updateScanLine(0, false); }
+    // Phase 7: scan + modes — scroll-driven sweep
+    if (phase === 6) {
+        show(7, Math.min(1, t * 2));
+        updateScanLine(Math.round(rawT * window.innerHeight), true);
+    } else if (phase === 7) {
+        show(7, Math.max(0, 1 - t * 2));
+        updateScanLine(window.innerHeight, false);
+    } else {
+        show(7, 0);
+        updateScanLine(0, false);
+    }
 
     // Phase 8: free rotation
     if (phase === 7)      show(8, Math.min(1, t * 2));

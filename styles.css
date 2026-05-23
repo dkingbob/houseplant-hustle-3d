@@ -1,22 +1,17 @@
 /* ================================================================
-   HOUSEPLANT HUSTLE™ — Styles
+   HOUSEPLANT HUSTLE™ — Full styles for all 9 phases
    ================================================================ */
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
   --orange: #E87722;
   --green:  #3DBA5E;
+  --cream:  #F5F0E8;
   --dark:   #0D0B07;
 }
 
-html {
-  scroll-behavior: auto;
-}
+html { scroll-behavior: auto; }
 
 body {
   background: #1a1108;
@@ -28,166 +23,255 @@ body {
 /* ── Canvases ──────────────────────────────────────────────────── */
 
 #canvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  display: block;
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 1; display: block;
 }
 
 #paint-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 20;
-  pointer-events: none;
-  display: block;
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 20; pointer-events: none; display: block;
 }
 
-/* ── Scroll phantom — keeps page scrollable ─────────────────────── */
+/* ── Scroll phantom ─────────────────────────────────────────────── */
 
-#scroll-phantom {
-  height: 900vh;
-  pointer-events: none;
-  width: 1px;
+#scroll-phantom { height: 900vh; width: 1px; pointer-events: none; }
+
+/* ── Scan line ─────────────────────────────────────────────────── */
+
+#scan-line {
+  position: fixed; left: 0; top: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(to right, transparent 5%, #00ff55 40%, #00ff55 60%, transparent 95%);
+  box-shadow: 0 0 14px #00ff55, 0 0 6px #00ff5588;
+  pointer-events: none; z-index: 15; display: none;
+  transform: translateY(0); will-change: transform;
 }
 
-/* ── Phase overlays ─────────────────────────────────────────────── */
+/* ── Fade overlay (Phase 9 loop) ────────────────────────────────── */
+
+#fade-overlay {
+  position: fixed; inset: 0;
+  background: #0D0B07;
+  opacity: 0; z-index: 50; pointer-events: none;
+}
+
+/* ── Phase overlay base ─────────────────────────────────────────── */
 
 .phase-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  padding: 0 6vw;
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; align-items: center;
+  padding: 0 5vw;
   pointer-events: none;
   will-change: opacity;
 }
 
-/* ── Hero block ─────────────────────────────────────────────────── */
+.phase-overlay.left  { justify-content: flex-start; }
+.phase-overlay.right { justify-content: flex-end; }
+
+.phase-overlay.bottom {
+  align-items: flex-end;
+  padding-bottom: 4vh;
+  justify-content: center;
+}
+
+.phase-overlay.hidden { opacity: 0; }
+
+/* ── Hero block (Phase 1) ───────────────────────────────────────── */
 
 .hero-block {
   max-width: 440px;
   pointer-events: auto;
 }
 
-/* ── Eyebrow ────────────────────────────────────────────────────── */
-
 .eyebrow {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 1rem;
-  opacity: 0;
-  transform: translateY(14px);
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 1rem;
+  opacity: 0; transform: translateY(14px);
   transition: opacity 0.5s ease, transform 0.5s ease;
   will-change: transform, opacity;
 }
+.eyebrow.in { opacity: 1; transform: translateY(0); }
 
-.eyebrow.in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Headline — mask reveal + rubber ───────────────────────────── */
-
-.headline-wrap {
-  overflow: hidden;
-  line-height: 1;
-}
+.headline-wrap { overflow: hidden; line-height: 1; }
 
 .headline {
   font-family: 'Arial Black', 'Impact', 'Haettenschweiler', sans-serif;
-  font-size: clamp(3rem, 7.5vw, 6.5rem);
-  font-weight: 900;
-  line-height: 0.91;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-  color: #fff;
-  display: block;
-  opacity: 0;
-  transform: translateY(108%);
+  font-size: clamp(3rem, 7.5vw, 6.5rem); font-weight: 900;
+  line-height: 0.91; letter-spacing: -0.03em; text-transform: uppercase;
+  color: #fff; display: block;
+  opacity: 0; transform: translateY(108%);
   transition: opacity 0.01s, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
-  will-change: transform;
-  transform-origin: 50% 50%;
+  will-change: transform; transform-origin: 50% 50%;
 }
-
-.headline.in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Once JS takes over the rubber effect, kill transform transition */
-.headline.rubber-ready {
-  transition: opacity 0.01s;
-}
-
-/* ── Subline ────────────────────────────────────────────────────── */
+.headline.in { opacity: 1; transform: translateY(0); }
+.headline.rubber-ready { transition: opacity 0.01s; }
 
 .subline {
-  font-size: 1.05rem;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.62);
-  margin-top: 1.6rem;
-  opacity: 0;
-  transform: translateY(14px);
+  font-size: 1.05rem; line-height: 1.65;
+  color: rgba(255,255,255,0.62); margin-top: 1.6rem;
+  opacity: 0; transform: translateY(14px);
   transition: opacity 0.55s ease 0.38s, transform 0.55s ease 0.38s;
   will-change: transform, opacity;
 }
-
-.subline.in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Tagline ────────────────────────────────────────────────────── */
+.subline.in { opacity: 1; transform: translateY(0); }
 
 .tagline {
-  font-size: 0.88rem;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.38);
-  margin-top: 0.7rem;
-  opacity: 0;
-  transform: translateY(14px);
+  font-size: 0.88rem; line-height: 1.65;
+  color: rgba(255,255,255,0.38); margin-top: 0.7rem;
+  opacity: 0; transform: translateY(14px);
   transition: opacity 0.55s ease 0.54s, transform 0.55s ease 0.54s;
   will-change: transform, opacity;
 }
-
-.tagline.in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.tagline em {
-  color: var(--green);
-  font-style: normal;
-  font-weight: 600;
-}
-
-/* ── Scroll hint ────────────────────────────────────────────────── */
+.tagline.in { opacity: 1; transform: translateY(0); }
+.tagline em { color: var(--green); font-style: normal; font-weight: 600; }
 
 .scroll-hint {
-  margin-top: 2.8rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.28);
-  opacity: 0;
-  transition: opacity 0.55s ease 0.8s;
-  will-change: transform, opacity;
+  margin-top: 2.8rem; font-size: 0.72rem;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28); opacity: 0;
+  transition: opacity 0.55s ease 0.8s; will-change: opacity;
   animation: nudge 2.2s ease-in-out 1.8s infinite;
 }
-
-.scroll-hint.in {
-  opacity: 1;
-}
+.scroll-hint.in { opacity: 1; }
 
 @keyframes nudge {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(6px); }
+}
+
+/* ── Stat block (Phases 3-6) ────────────────────────────────────── */
+
+.stat-block, .sketch-block, .cta-block {
+  max-width: 420px;
+  pointer-events: auto;
+}
+
+.phase-label {
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 0.9rem;
+}
+
+.phase-title {
+  font-family: 'Arial Black', 'Impact', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 900; line-height: 0.95;
+  letter-spacing: -0.02em; text-transform: uppercase;
+  color: #fff; margin-bottom: 1.4rem;
+}
+
+.phase-title.accent { color: var(--green); margin-top: 0.4rem; }
+
+.phase-body {
+  font-size: 0.92rem; line-height: 1.7;
+  color: rgba(255,255,255,0.6); margin-bottom: 1rem;
+}
+
+.phase-note {
+  font-size: 0.72rem; line-height: 1.5;
+  color: rgba(255,255,255,0.3);
+  font-style: italic;
+}
+
+/* ── Stats grid (Phase 3) ───────────────────────────────────────── */
+
+.stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 1.6rem; margin-bottom: 1.2rem;
+}
+
+.stat { display: flex; flex-direction: column; }
+
+.stat-val {
+  font-family: 'Arial Black', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 900;
+  color: var(--orange); line-height: 1;
+}
+
+.stat-key {
+  font-size: 0.68rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: rgba(255,255,255,0.45);
+  margin-top: 0.3rem;
+}
+
+/* ── Mode row (Phase 7) ─────────────────────────────────────────── */
+
+.mode-row {
+  display: flex; align-items: flex-end;
+  gap: 3rem; pointer-events: auto;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 1.2rem 1.8rem;
+}
+
+.mode-info { flex: 1; }
+
+.mode-desc {
+  font-size: 0.82rem; line-height: 1.5;
+  color: rgba(255,255,255,0.5); margin-top: 0.4rem;
+  max-width: 240px;
+}
+
+.mode-buttons {
+  display: flex; gap: 0.5rem;
+  flex-wrap: wrap; justify-content: flex-end;
+}
+
+.mode-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.55);
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.5rem 1rem; border-radius: 6px;
+  cursor: pointer; transition: all 0.2s ease;
+  will-change: transform;
+}
+.mode-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+  transform: translateY(-1px);
+}
+.mode-btn.active {
+  background: var(--green);
+  border-color: var(--green);
+  color: #000; font-weight: 700;
+}
+
+/* ── CTA block (Phase 8) ────────────────────────────────────────── */
+
+.cta-btn {
+  display: block; margin-top: 1.6rem;
+  background: var(--orange); color: #fff;
+  font-family: 'Arial Black', sans-serif;
+  font-size: 0.88rem; font-weight: 900;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  text-align: center; line-height: 1.3;
+  padding: 1rem 1.6rem; border-radius: 8px;
+  border: none; cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  will-change: transform;
+  box-shadow: 0 4px 24px rgba(232,119,34,0.4);
+}
+.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232,119,34,0.6); }
+.cta-sub { font-size: 0.68rem; font-weight: 400; letter-spacing: 0.22em; opacity: 0.8; }
+
+.testimonials { margin-top: 1.4rem; display: flex; flex-direction: column; gap: 0.7rem; }
+
+blockquote {
+  font-size: 0.78rem; line-height: 1.5;
+  color: rgba(255,255,255,0.42);
+  border-left: 2px solid rgba(255,255,255,0.12);
+  padding-left: 0.8rem;
+}
+blockquote cite {
+  display: block; font-style: normal;
+  color: rgba(255,255,255,0.22); font-size: 0.68rem;
+  margin-top: 0.15rem;
 }

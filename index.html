@@ -10,12 +10,15 @@
 
   <!-- Three.js canvas — always the background -->
   <canvas id="canvas"></canvas>
-
-  <!-- Paint blob overlay canvas — above everything, no pointer events -->
+  <!-- 2D paint-blob overlay — above everything, no pointer events -->
   <canvas id="paint-canvas"></canvas>
+  <!-- Scan line (Phase 7) -->
+  <div id="scan-line"></div>
+  <!-- Fade overlay (Phase 9 loop) -->
+  <div id="fade-overlay"></div>
 
-  <!-- Phase 1: Hero text overlay -->
-  <div id="phase-1" class="phase-overlay">
+  <!-- ── Phase 1: DESK TOP-DOWN ─────────────────────────────── -->
+  <div id="phase-1" class="phase-overlay left">
     <div class="hero-block">
       <p class="eyebrow">Introducing</p>
       <div class="headline-wrap">
@@ -27,14 +30,96 @@
     </div>
   </div>
 
-  <!-- Phantom element — makes the page scrollable so window.scrollY works -->
+  <!-- ── Phase 3: FRONT VIEW + INFO ─────────────────────────── -->
+  <div id="phase-3" class="phase-overlay left hidden">
+    <div class="stat-block">
+      <p class="phase-label">Plant Model HHP-001</p>
+      <h2 class="phase-title">The Last Plant<br>You'll Ever Need.</h2>
+      <div class="stats">
+        <div class="stat"><span class="stat-val">99.7%</span><span class="stat-key">Photosynthesis Rate</span></div>
+        <div class="stat"><span class="stat-val">4.2kg</span><span class="stat-key">CO₂ / day</span></div>
+        <div class="stat"><span class="stat-val">∞</span><span class="stat-key">Vibes Generated</span></div>
+        <div class="stat"><span class="stat-val">0.0003</span><span class="stat-key">mm/s Growth Velocity</span></div>
+      </div>
+      <p class="phase-note">Results may vary. AI not responsible for sunlight.</p>
+    </div>
+  </div>
+
+  <!-- ── Phase 4: POT DISSOLVES ─────────────────────────────── -->
+  <div id="phase-4" class="phase-overlay right hidden">
+    <div class="stat-block">
+      <p class="phase-label">Internal Architecture</p>
+      <h2 class="phase-title">AI-Optimized<br>Root System™</h2>
+      <p class="phase-body">Our proprietary RootNet™ architecture deploys 2.3 billion parameters — all dedicated to one task: not dying.<br><br>It has outperformed every FAANG plant in controlled greenhouse benchmarks conducted by us, in our office, on our plant.</p>
+      <p class="phase-note">Third-party verification ongoing since 2019.</p>
+    </div>
+  </div>
+
+  <!-- ── Phase 5: SOIL FALLS AWAY ───────────────────────────── -->
+  <div id="phase-5" class="phase-overlay left hidden">
+    <div class="stat-block">
+      <p class="phase-label">Substrate Intelligence</p>
+      <h2 class="phase-title">Deep Learning<br>Roots™</h2>
+      <p class="phase-body">Trained on 40 years of soil data. The AI doesn't know what worms are, but it respects them deeply.<br><br>Each root tip is a transformer head. The soil was just the training data. The plant is the model. You are the user.</p>
+      <p class="phase-note">No worms were harmed. Probably.</p>
+    </div>
+  </div>
+
+  <!-- ── Phase 6: SKETCH OVERLAY ────────────────────────────── -->
+  <div id="phase-6" class="phase-overlay right hidden">
+    <div class="sketch-block">
+      <p class="phase-label">Design Language</p>
+      <h2 class="phase-title">Designed by<br>nature.</h2>
+      <h2 class="phase-title accent">Optimized<br>by AI.</h2>
+      <p class="phase-body">Every leaf angle computed. Every stem curve approved by a committee of 12 algorithms and one intern who really likes plants.</p>
+      <p class="phase-note">Hover to activate concept mode.</p>
+    </div>
+  </div>
+
+  <!-- ── Phase 7: SCAN & MODES ───────────────────────────────── -->
+  <div id="phase-7" class="phase-overlay bottom hidden">
+    <div class="mode-row">
+      <div class="mode-info">
+        <p class="phase-label" id="mode-label">Standard Mode</p>
+        <p class="mode-desc"   id="mode-desc">The plant, as nature intended. With better lighting.</p>
+      </div>
+      <div class="mode-buttons">
+        <button class="mode-btn active" data-mode="standard">Standard</button>
+        <button class="mode-btn"        data-mode="thermal">Thermal</button>
+        <button class="mode-btn"        data-mode="xray">X-Ray</button>
+        <button class="mode-btn"        data-mode="wireframe">Wireframe</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Phase 8: FREE ROTATION ─────────────────────────────── -->
+  <div id="phase-8" class="phase-overlay right hidden">
+    <div class="cta-block">
+      <p class="phase-label">Limited Drop</p>
+      <h2 class="phase-title">Own the Future<br>of Foliage.</h2>
+      <p class="phase-body">Drag to inspect. Every angle optimized.<br>Every photon fully accountable.</p>
+      <button class="cta-btn" onclick="void 0">
+        Pre-order your AI Plant<br>
+        <span class="cta-sub">— SOLD OUT —</span>
+      </button>
+      <div class="testimonials">
+        <blockquote>"I can't believe it's not dying."<cite>— GPT-4, Verified Buyer</cite></blockquote>
+        <blockquote>"Better than my kids."<cite>— The Algorithm</cite></blockquote>
+        <blockquote>"It photosynthesizes in my dreams now."<cite>— User #00847</cite></blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phantom to make page scrollable (900vh = 9 phases × 100vh) -->
   <div id="scroll-phantom"></div>
 
   <script type="importmap">
   {
     "imports": {
       "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-      "three/addons/loaders/GLTFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js"
+      "three/addons/loaders/GLTFLoader.js":          "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js",
+      "three/addons/controls/OrbitControls.js":      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js",
+      "three/addons/utils/BufferGeometryUtils.js":   "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/utils/BufferGeometryUtils.js"
     }
   }
   </script>

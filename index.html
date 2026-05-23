@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>HOUSEPLANT HUSTLE 3D</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOUSEPLANT HUSTLE™</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<script src="main.js"></script>
+
+  <!-- Three.js canvas — always the background -->
+  <canvas id="canvas"></canvas>
+
+  <!-- Paint blob overlay canvas — above everything, no pointer events -->
+  <canvas id="paint-canvas"></canvas>
+
+  <!-- Phase 1: Hero text overlay -->
+  <div id="phase-1" class="phase-overlay">
+    <div class="hero-block">
+      <p class="eyebrow">Introducing</p>
+      <div class="headline-wrap">
+        <h1 class="headline" id="js-rubber">HOUSEPLANT<br>HUSTLE™</h1>
+      </div>
+      <p class="subline">The world's first AI-optimized<br>living organism.</p>
+      <p class="tagline">Zero downtime. Infinite growth. <em>Proven by leaves.</em></p>
+      <p class="scroll-hint">↓ Scroll to explore</p>
+    </div>
+  </div>
+
+  <!-- Phantom element — makes the page scrollable so window.scrollY works -->
+  <div id="scroll-phantom"></div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/loaders/GLTFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js"
+    }
+  }
+  </script>
+  <script type="module" src="main.js"></script>
+
 </body>
 </html>

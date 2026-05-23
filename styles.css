@@ -1,1 +1,193 @@
-/* styles.css */
+/* ================================================================
+   HOUSEPLANT HUSTLE™ — Styles
+   ================================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --orange: #E87722;
+  --green:  #3DBA5E;
+  --dark:   #0D0B07;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  background: #1a1108;
+  overflow-x: hidden;
+  font-family: 'Arial', Helvetica, sans-serif;
+  color: #fff;
+}
+
+/* ── Canvases ──────────────────────────────────────────────────── */
+
+#canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: block;
+}
+
+#paint-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+  display: block;
+}
+
+/* ── Scroll phantom — keeps page scrollable ─────────────────────── */
+
+#scroll-phantom {
+  height: 900vh;
+  pointer-events: none;
+  width: 1px;
+}
+
+/* ── Phase overlays ─────────────────────────────────────────────── */
+
+.phase-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 0 6vw;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* ── Hero block ─────────────────────────────────────────────────── */
+
+.hero-block {
+  max-width: 440px;
+  pointer-events: auto;
+}
+
+/* ── Eyebrow ────────────────────────────────────────────────────── */
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  will-change: transform, opacity;
+}
+
+.eyebrow.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Headline — mask reveal + rubber ───────────────────────────── */
+
+.headline-wrap {
+  overflow: hidden;
+  line-height: 1;
+}
+
+.headline {
+  font-family: 'Arial Black', 'Impact', 'Haettenschweiler', sans-serif;
+  font-size: clamp(3rem, 7.5vw, 6.5rem);
+  font-weight: 900;
+  line-height: 0.91;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: #fff;
+  display: block;
+  opacity: 0;
+  transform: translateY(108%);
+  transition: opacity 0.01s, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+  will-change: transform;
+  transform-origin: 50% 50%;
+}
+
+.headline.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Once JS takes over the rubber effect, kill transform transition */
+.headline.rubber-ready {
+  transition: opacity 0.01s;
+}
+
+/* ── Subline ────────────────────────────────────────────────────── */
+
+.subline {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.62);
+  margin-top: 1.6rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.55s ease 0.38s, transform 0.55s ease 0.38s;
+  will-change: transform, opacity;
+}
+
+.subline.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Tagline ────────────────────────────────────────────────────── */
+
+.tagline {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.38);
+  margin-top: 0.7rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.55s ease 0.54s, transform 0.55s ease 0.54s;
+  will-change: transform, opacity;
+}
+
+.tagline.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tagline em {
+  color: var(--green);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ── Scroll hint ────────────────────────────────────────────────── */
+
+.scroll-hint {
+  margin-top: 2.8rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  opacity: 0;
+  transition: opacity 0.55s ease 0.8s;
+  will-change: transform, opacity;
+  animation: nudge 2.2s ease-in-out 1.8s infinite;
+}
+
+.scroll-hint.in {
+  opacity: 1;
+}
+
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}

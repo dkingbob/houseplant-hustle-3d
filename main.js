@@ -1,11 +1,11 @@
 // ================================================================
-// main.js — RAF loop, virtual scroll, rubber text, paint blobs
+// main.js — RAF loop, virtual scroll, rubber text, phase reveals
 // ================================================================
 import { renderFrame } from './scene.js';
 import { setMode }     from './effects.js';
 import { updatePhase, shouldResetLoop, clearResetFlag } from './phases.js';
 
-// ── Scroll state (exported so phases.js loop-reset can read it) ──
+// ── Scroll state ─────────────────────────────────────────────────
 const scroll = { current: 0, target: 0 };
 const mouse  = { x: 0, y: 0, nx: 0, ny: 0 };
 
@@ -15,7 +15,6 @@ window.addEventListener('mousemove', (e) => {
     mouse.x  = e.clientX; mouse.y  = e.clientY;
     mouse.nx = (e.clientX / window.innerWidth  - 0.5) * 2;
     mouse.ny = (e.clientY / window.innerHeight - 0.5) * 2;
-    trackPaint(e);
 });
 
 // ── Rubber text spring ───────────────────────────────────────────
@@ -35,65 +34,6 @@ function stepRubber() {
         `translate(${sp.x.toFixed(2)}px,${sp.y.toFixed(2)}px) skewX(${(sp.x * 0.22).toFixed(2)}deg)`;
 }
 
-// ── Paint blobs ─────────────────────────────────────────────────
-const paintCanvas = document.getElementById('paint-canvas');
-const pCtx = paintCanvas.getContext('2d');
-function sizePaint() { paintCanvas.width = window.innerWidth; paintCanvas.height = window.innerHeight; }
-sizePaint();
-window.addEventListener('resize', sizePaint);
-
-const BLOB_LIFE = 680;
-const blobs = [];
-let lastEmit = 0, lastMX = 0, lastMY = 0, overText = false;
-
-document.querySelectorAll(
-    '.eyebrow,.headline,.subline,.tagline,.phase-title,.phase-body,.phase-label,.stat-val,.stat-key'
-).forEach(el => {
-    el.addEventListener('mouseenter', () => { overText = true; });
-    el.addEventListener('mouseleave', () => { overText = false; });
-});
-
-function emitBlob(x, y, vx, vy) {
-    const spd = Math.sqrt(vx * vx + vy * vy);
-    const r   = 16 + Math.random() * 26;
-    blobs.push({
-        x, y,
-        rx: r * (1 + spd * 0.04), ry: r * 0.55,
-        angle: Math.atan2(vy, vx),
-        peak:  0.65 + Math.random() * 0.35,
-        birth: performance.now()
-    });
-}
-
-function trackPaint(e) {
-    if (!overText) return;
-    const now = performance.now();
-    if (now - lastEmit < 38) return;
-    const vx = e.clientX - lastMX, vy = e.clientY - lastMY;
-    if (Math.abs(vx) + Math.abs(vy) < 2) return;
-    emitBlob(e.clientX, e.clientY, vx, vy);
-    lastEmit = now; lastMX = e.clientX; lastMY = e.clientY;
-}
-
-function drawBlobs(now) {
-    pCtx.clearRect(0, 0, paintCanvas.width, paintCanvas.height);
-    for (let i = blobs.length - 1; i >= 0; i--) {
-        const b = blobs[i], age = now - b.birth;
-        if (age >= BLOB_LIFE) { blobs.splice(i, 1); continue; }
-        const t = age / BLOB_LIFE;
-        const alpha = b.peak * (t < 0.15 ? t / 0.15 : 1 - ((t - 0.15) / 0.85) ** 1.6);
-        pCtx.save();
-        pCtx.translate(b.x, b.y); pCtx.rotate(b.angle);
-        const g = pCtx.createRadialGradient(0, 0, 0, 0, 0, b.rx);
-        g.addColorStop(0,   `rgba(232,119,34,${alpha})`);
-        g.addColorStop(0.5, `rgba(210,90,15,${alpha * 0.7})`);
-        g.addColorStop(1,   'rgba(190,60,0,0)');
-        pCtx.fillStyle = g;
-        pCtx.beginPath(); pCtx.ellipse(0, 0, b.rx, b.ry, 0, 0, Math.PI * 2); pCtx.fill();
-        pCtx.restore();
-    }
-}
-
 // ── Mode buttons ─────────────────────────────────────────────────
 document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -103,26 +43,39 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     });
 });
 
+// ── Phase reveal system ───────────────────────────────────────────
+const revealedPhases = new Set();
+
+function triggerReveal(container) {
+    if (!container) return;
+    const spans = container.querySelectorAll('.lw > span');
+    const rvs   = container.querySelectorAll('.rv, .rf');
+    spans.forEach((s, i) => setTimeout(() => s.classList.add('in'), i * 120));
+    rvs.forEach((r, i)   => setTimeout(() => r.classList.add('in'), spans.length * 120 + i * 100));
+}
+
+function phaseReveal(overlayId) {
+    if (revealedPhases.has(overlayId)) return;
+    revealedPhases.add(overlayId);
+    triggerReveal(document.getElementById(`phase-${overlayId}`));
+}
+
 // ── Phase 1 reveal ──────────────────────────────────────────────
-const revealEls = document.querySelectorAll('.eyebrow,.headline,.subline,.tagline,.scroll-hint');
 let revealed = false;
 
 function revealPhase1() {
     if (revealed) return; revealed = true;
-    revealEls.forEach(el => el.classList.add('in'));
-    setTimeout(() => {
-        if (headline) { headline.classList.add('rubber-ready'); rubberReady = true; }
-    }, 860);
+    triggerReveal(document.getElementById('phase-1'));
+    // Enable rubber spring after intro animation completes
+    setTimeout(() => { rubberReady = true; }, 900);
 }
 
 // ── RAF loop ────────────────────────────────────────────────────
 function tick(now) {
     requestAnimationFrame(tick);
 
-    // Lerp virtual scroll
     scroll.current += (scroll.target - scroll.current) * 0.095;
 
-    // Handle loop-back from Phase 9
     if (shouldResetLoop) {
         clearResetFlag();
         window.scrollTo({ top: 0, behavior: 'instant' });
@@ -130,17 +83,18 @@ function tick(now) {
         scroll.target  = 0;
     }
 
-    // Phase update — handles camera, overlays, effects each frame
     updatePhase(scroll.current, mouse.nx, mouse.ny, mouse.y);
 
-    // Rubber text (Phase 1 only)
-    const phase = Math.min(8, Math.floor(scroll.current / window.innerHeight));
-    if (phase === 0) stepRubber();
+    const ph = Math.min(8, Math.floor(scroll.current / window.innerHeight));
+    if (ph === 0) stepRubber();
 
-    // Paint blobs
-    drawBlobs(now);
+    // Trigger per-phase reveals on first arrival
+    if (ph >= 2) phaseReveal(3);
+    if (ph >= 3) phaseReveal(4);
+    if (ph >= 4) phaseReveal(5);
+    if (ph >= 5) phaseReveal(6);
+    if (ph >= 7) phaseReveal(8);
 
-    // Render Three.js
     renderFrame();
 }
 

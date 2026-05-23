@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HOUSEPLANT HUSTLE™</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <!-- Three.js canvas — always the background -->
   <canvas id="canvas"></canvas>
-  <!-- 2D paint-blob overlay — above everything, no pointer events -->
-  <canvas id="paint-canvas"></canvas>
   <!-- Scan line (Phase 7) -->
   <div id="scan-line"></div>
   <!-- Fade overlay (Phase 9 loop) -->
@@ -20,59 +21,77 @@
   <!-- ── Phase 1: DESK TOP-DOWN ─────────────────────────────── -->
   <div id="phase-1" class="phase-overlay left">
     <div class="hero-block">
-      <p class="eyebrow">Introducing</p>
+      <p class="eyebrow rv">Introducing</p>
       <div class="headline-wrap">
-        <h1 class="headline" id="js-rubber">HOUSEPLANT<br>HUSTLE™</h1>
+        <h1 class="headline" id="js-rubber">
+          <span class="lw"><span>HOUSEPLANT</span></span><br>
+          <span class="lw"><span>HUSTLE™</span></span>
+        </h1>
       </div>
-      <p class="subline">The world's first AI-optimized<br>living organism.</p>
-      <p class="tagline">Zero downtime. Infinite growth. <em>Proven by leaves.</em></p>
-      <p class="scroll-hint">↓ Scroll to explore</p>
+      <p class="subline rv">The world's first AI-optimized<br>living organism.</p>
+      <p class="tagline rv">Zero downtime. Infinite growth. <em>Proven by leaves.</em></p>
+      <p class="scroll-hint rf">↓ Scroll to explore</p>
     </div>
   </div>
 
   <!-- ── Phase 3: FRONT VIEW + INFO ─────────────────────────── -->
   <div id="phase-3" class="phase-overlay left hidden">
     <div class="stat-block">
-      <p class="phase-label">Plant Model HHP-001</p>
-      <h2 class="phase-title">The Last Plant<br>You'll Ever Need.</h2>
-      <div class="stats">
+      <p class="phase-label rv">Plant Model HHP-001</p>
+      <h2 class="phase-title">
+        <span class="lw"><span>The Last Plant</span></span>
+        <span class="lw"><span>You'll Ever Need.</span></span>
+      </h2>
+      <div class="stats rv">
         <div class="stat"><span class="stat-val">99.7%</span><span class="stat-key">Photosynthesis Rate</span></div>
         <div class="stat"><span class="stat-val">4.2kg</span><span class="stat-key">CO₂ / day</span></div>
         <div class="stat"><span class="stat-val">∞</span><span class="stat-key">Vibes Generated</span></div>
         <div class="stat"><span class="stat-val">0.0003</span><span class="stat-key">mm/s Growth Velocity</span></div>
       </div>
-      <p class="phase-note">Results may vary. AI not responsible for sunlight.</p>
+      <p class="phase-note rv">Results may vary. AI not responsible for sunlight.</p>
     </div>
   </div>
 
   <!-- ── Phase 4: POT DISSOLVES ─────────────────────────────── -->
   <div id="phase-4" class="phase-overlay right hidden">
     <div class="stat-block">
-      <p class="phase-label">Internal Architecture</p>
-      <h2 class="phase-title">AI-Optimized<br>Root System™</h2>
-      <p class="phase-body">Our proprietary RootNet™ architecture deploys 2.3 billion parameters — all dedicated to one task: not dying.<br><br>It has outperformed every FAANG plant in controlled greenhouse benchmarks conducted by us, in our office, on our plant.</p>
-      <p class="phase-note">Third-party verification ongoing since 2019.</p>
+      <p class="phase-label rv">Internal Architecture</p>
+      <h2 class="phase-title">
+        <span class="lw"><span>AI-Optimized</span></span>
+        <span class="lw"><span>Root System™</span></span>
+      </h2>
+      <p class="phase-body rv">Our proprietary RootNet™ architecture deploys 2.3 billion parameters — all dedicated to one task: not dying.<br><br>It has outperformed every FAANG plant in controlled greenhouse benchmarks conducted by us, in our office, on our plant.</p>
+      <p class="phase-note rv">Third-party verification ongoing since 2019.</p>
     </div>
   </div>
 
   <!-- ── Phase 5: SOIL FALLS AWAY ───────────────────────────── -->
   <div id="phase-5" class="phase-overlay left hidden">
     <div class="stat-block">
-      <p class="phase-label">Substrate Intelligence</p>
-      <h2 class="phase-title">Deep Learning<br>Roots™</h2>
-      <p class="phase-body">Trained on 40 years of soil data. The AI doesn't know what worms are, but it respects them deeply.<br><br>Each root tip is a transformer head. The soil was just the training data. The plant is the model. You are the user.</p>
-      <p class="phase-note">No worms were harmed. Probably.</p>
+      <p class="phase-label rv">Substrate Intelligence</p>
+      <h2 class="phase-title">
+        <span class="lw"><span>Deep Learning</span></span>
+        <span class="lw"><span>Roots™</span></span>
+      </h2>
+      <p class="phase-body rv">Trained on 40 years of soil data. The AI doesn't know what worms are, but it respects them deeply.<br><br>Each root tip is a transformer head. The soil was just the training data. The plant is the model. You are the user.</p>
+      <p class="phase-note rv">No worms were harmed. Probably.</p>
     </div>
   </div>
 
   <!-- ── Phase 6: SKETCH OVERLAY ────────────────────────────── -->
   <div id="phase-6" class="phase-overlay right hidden">
     <div class="sketch-block">
-      <p class="phase-label">Design Language</p>
-      <h2 class="phase-title">Designed by<br>nature.</h2>
-      <h2 class="phase-title accent">Optimized<br>by AI.</h2>
-      <p class="phase-body">Every leaf angle computed. Every stem curve approved by a committee of 12 algorithms and one intern who really likes plants.</p>
-      <p class="phase-note">Hover to activate concept mode.</p>
+      <p class="phase-label rv">Design Language</p>
+      <h2 class="phase-title">
+        <span class="lw"><span>Designed by</span></span>
+        <span class="lw"><span>nature.</span></span>
+      </h2>
+      <h2 class="phase-title accent">
+        <span class="lw"><span>Optimized</span></span>
+        <span class="lw"><span>by AI.</span></span>
+      </h2>
+      <p class="phase-body rv">Every leaf angle computed. Every stem curve approved by a committee of 12 algorithms and one intern who really likes plants.</p>
+      <p class="phase-note rv">Hover to activate concept mode.</p>
     </div>
   </div>
 
@@ -95,14 +114,17 @@
   <!-- ── Phase 8: FREE ROTATION ─────────────────────────────── -->
   <div id="phase-8" class="phase-overlay right hidden">
     <div class="cta-block">
-      <p class="phase-label">Limited Drop</p>
-      <h2 class="phase-title">Own the Future<br>of Foliage.</h2>
-      <p class="phase-body">Drag to inspect. Every angle optimized.<br>Every photon fully accountable.</p>
-      <button class="cta-btn" onclick="void 0">
+      <p class="phase-label rv">Limited Drop</p>
+      <h2 class="phase-title">
+        <span class="lw"><span>Own the Future</span></span>
+        <span class="lw"><span>of Foliage.</span></span>
+      </h2>
+      <p class="phase-body rv">Drag to inspect. Every angle optimized.<br>Every photon fully accountable.</p>
+      <button class="cta-btn rv" onclick="void 0">
         Pre-order your AI Plant<br>
         <span class="cta-sub">— SOLD OUT —</span>
       </button>
-      <div class="testimonials">
+      <div class="testimonials rv">
         <blockquote>"I can't believe it's not dying."<cite>— GPT-4, Verified Buyer</cite></blockquote>
         <blockquote>"Better than my kids."<cite>— The Algorithm</cite></blockquote>
         <blockquote>"It photosynthesizes in my dreams now."<cite>— User #00847</cite></blockquote>

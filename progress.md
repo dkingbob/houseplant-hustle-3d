@@ -55,5 +55,17 @@ Satirical product page for an AI-optimized houseplant. Persistent 3D scene (Thre
 - Soil particles: deterministic scroll-driven physics (position = init + vel*t - g*t²)
 - Material clones per mesh for safe mode-switching
 
+## Recent Changes
+- **Plant positioning fix** — Removed bounding-box X/Z centering; plant now uses GLB's own origin (stem at 0,0), keeping Y seating at soil level (0.94 - b2.min.y)
+- **Orange trail removed** — Deleted all paint-blob code (paintCanvas, emitBlob, trackPaint, drawBlobs), removed `#paint-canvas` from HTML
+- **Text animations restored** — Added Google Fonts (Syne + DM Sans). Hero headline uses `.lw span` curtain-reveal (slide-up per line). All body/label text uses `.rv` (fade+translateY) or `.rf` (opacity-only). Staggered via JS setTimeout. Phase overlays 3–8 all use same pattern, triggered on first scroll-arrival.
+- **Font upgrade** — Syne for all headlines and stat values; DM Sans for body copy
+- **Hover effect** — Text elements use `filter: brightness(1.2)` on hover instead of glow
+
+## Pending
+- Scroll-driven scan line (Phase 7) — currently mouse-Y driven; should sweep via scroll progress
+- Site pacing — increase scroll distance per phase (currently 100vh each; consider 150–200vh)
+- Overall polish pass
+
 ## Current Status
-**All 9 phases implemented.** Committed and deploying to Vercel.
+**All 9 phases implemented + polish round 1 applied.** Commit and deploy when ready.

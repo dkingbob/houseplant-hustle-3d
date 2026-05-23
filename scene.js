@@ -148,7 +148,7 @@ new GLTFLoader().load('./assets/plant.glb', (gltf) => {
     if (d > 0) model.scale.setScalar(3.0 / d);
     const b2 = new THREE.Box3().setFromObject(model);
     const c  = b2.getCenter(new THREE.Vector3());
-    model.position.set(-c.x, 0.94 - b2.min.y, -c.z);
+    model.position.set(0, 0.94 - b2.min.y, 0);
     model.traverse(ch => {
         if (!ch.isMesh) return;
         ch.castShadow = true; ch.receiveShadow = true;

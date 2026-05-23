@@ -16,22 +16,16 @@ html { scroll-behavior: auto; }
 body {
   background: #1a1108;
   overflow-x: hidden;
-  font-family: 'Arial', Helvetica, sans-serif;
+  font-family: 'DM Sans', Arial, Helvetica, sans-serif;
   color: #fff;
 }
 
-/* ── Canvases ──────────────────────────────────────────────────── */
+/* ── Canvas ─────────────────────────────────────────────────────── */
 
 #canvas {
   position: fixed; inset: 0;
   width: 100%; height: 100%;
   z-index: 1; display: block;
-}
-
-#paint-canvas {
-  position: fixed; inset: 0;
-  width: 100%; height: 100%;
-  z-index: 20; pointer-events: none; display: block;
 }
 
 /* ── Scroll phantom ─────────────────────────────────────────────── */
@@ -78,6 +72,30 @@ body {
 
 .phase-overlay.hidden { opacity: 0; }
 
+/* ── Curtain reveal ─────────────────────────────────────────────── */
+
+.lw { display: block; overflow: hidden; }
+.lw > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.72s cubic-bezier(.16, 1, .3, 1);
+}
+.lw > span.in { transform: translateY(0); }
+
+/* ── Fade-up reveal ─────────────────────────────────────────────── */
+
+.rv {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.rv.in { opacity: 1; transform: none; }
+
+/* ── Opacity-only reveal ────────────────────────────────────────── */
+
+.rf { opacity: 0; transition: opacity 0.55s ease; }
+.rf.in { opacity: 1; }
+
 /* ── Hero block (Phase 1) ───────────────────────────────────────── */
 
 .hero-block {
@@ -89,53 +107,35 @@ body {
   font-size: 0.72rem; font-weight: 700;
   letter-spacing: 0.32em; text-transform: uppercase;
   color: var(--orange); margin-bottom: 1rem;
-  opacity: 0; transform: translateY(14px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  will-change: transform, opacity;
 }
-.eyebrow.in { opacity: 1; transform: translateY(0); }
 
 .headline-wrap { overflow: hidden; line-height: 1; }
 
 .headline {
-  font-family: 'Arial Black', 'Impact', 'Haettenschweiler', sans-serif;
+  font-family: 'Syne', 'Arial Black', 'Impact', sans-serif;
   font-size: clamp(3rem, 7.5vw, 6.5rem); font-weight: 900;
   line-height: 0.91; letter-spacing: -0.03em; text-transform: uppercase;
   color: #fff; display: block;
-  opacity: 0; transform: translateY(108%);
-  transition: opacity 0.01s, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
   will-change: transform; transform-origin: 50% 50%;
 }
-.headline.in { opacity: 1; transform: translateY(0); }
-.headline.rubber-ready { transition: opacity 0.01s; }
 
 .subline {
   font-size: 1.05rem; line-height: 1.65;
   color: rgba(255,255,255,0.62); margin-top: 1.6rem;
-  opacity: 0; transform: translateY(14px);
-  transition: opacity 0.55s ease 0.38s, transform 0.55s ease 0.38s;
-  will-change: transform, opacity;
 }
-.subline.in { opacity: 1; transform: translateY(0); }
 
 .tagline {
   font-size: 0.88rem; line-height: 1.65;
   color: rgba(255,255,255,0.38); margin-top: 0.7rem;
-  opacity: 0; transform: translateY(14px);
-  transition: opacity 0.55s ease 0.54s, transform 0.55s ease 0.54s;
-  will-change: transform, opacity;
 }
-.tagline.in { opacity: 1; transform: translateY(0); }
 .tagline em { color: var(--green); font-style: normal; font-weight: 600; }
 
 .scroll-hint {
   margin-top: 2.8rem; font-size: 0.72rem;
   letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(255,255,255,0.28); opacity: 0;
-  transition: opacity 0.55s ease 0.8s; will-change: opacity;
-  animation: nudge 2.2s ease-in-out 1.8s infinite;
+  color: rgba(255,255,255,0.28);
 }
-.scroll-hint.in { opacity: 1; }
+.scroll-hint.in { animation: nudge 2.2s ease-in-out 0.6s infinite; }
 
 @keyframes nudge {
   0%, 100% { transform: translateY(0); }
@@ -156,13 +156,14 @@ body {
 }
 
 .phase-title {
-  font-family: 'Arial Black', 'Impact', sans-serif;
+  font-family: 'Syne', 'Arial Black', sans-serif;
   font-size: clamp(1.8rem, 3.5vw, 3rem);
   font-weight: 900; line-height: 0.95;
   letter-spacing: -0.02em; text-transform: uppercase;
   color: #fff; margin-bottom: 1.4rem;
+  transition: filter 0.2s ease;
 }
-
+.phase-title:hover { filter: brightness(1.2); }
 .phase-title.accent { color: var(--green); margin-top: 0.4rem; }
 
 .phase-body {
@@ -186,10 +187,12 @@ body {
 .stat { display: flex; flex-direction: column; }
 
 .stat-val {
-  font-family: 'Arial Black', sans-serif;
+  font-family: 'Syne', 'Arial Black', sans-serif;
   font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 900;
   color: var(--orange); line-height: 1;
+  transition: filter 0.2s ease;
 }
+.stat-val:hover { filter: brightness(1.3); cursor: default; }
 
 .stat-key {
   font-size: 0.68rem; letter-spacing: 0.08em;
@@ -248,7 +251,7 @@ body {
 .cta-btn {
   display: block; margin-top: 1.6rem;
   background: var(--orange); color: #fff;
-  font-family: 'Arial Black', sans-serif;
+  font-family: 'Syne', 'Arial Black', sans-serif;
   font-size: 0.88rem; font-weight: 900;
   letter-spacing: 0.04em; text-transform: uppercase;
   text-align: center; line-height: 1.3;
